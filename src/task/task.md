@@ -7,7 +7,8 @@
     设置变量rawHtml
     代码：
         <div v-html="rawHtml"></div>
-    在data方法中，表达式rawHtml的值为输入的内容
+    在data方法中，表达式rawHtml的值为输入的内容。
+    在列表中插入链接，跳转至相关文章的主要内容
     2.用<img v-bind:src="src">插入图片，其中src是图片的路径。其路径在data方法中设置，就可以在网页中显示图片了。
     3.用“<button v-on:click="doFavor">点赞</button>”设置按钮的点击事件。用count设置数量。当点击按钮时，调用doFavor方法，每点击一次，count+1。
     代码：
