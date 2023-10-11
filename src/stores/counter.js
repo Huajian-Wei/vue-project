@@ -9,9 +9,6 @@ export const useCounterStore = defineStore('counter', {
   actions: {// 不能使用箭头函数定义，因为使用箭头函数会导致 this 指向错误
       increment() {
         this.count++
-        // this.$patch({}) // 批量更新
-        // this.$patch((state) => {});
       },
      },
-   })
-   //test-test
+   }) 
