@@ -1,60 +1,92 @@
 <template>
-    <div class="registration-container">
-        <div class="registration-form">
-
-            <form>
-                <h2 class="top">注册</h2>
-                <div class="form-group">
-                    <label for="username">用户名:</label>
-                    <input type="text" id="username" v-model="username" />
-                </div>
-                <div class="form-group">
-                    <label for="password">密码:</label>
-                    <input type="password" id="password" v-model="password" />
-                </div>
-
-                <div class="form-group">
-                    <label for="password">确认密码:</label>
-                    <input type="password" id="password" v-model="password" />
-                </div>
-                <div class="form-group">
-                    <label for="email">邮箱:</label>
-                    <input type="email" id="email" v-model="email" />
-                </div>
-
-
-                <div class="form-group">
-                    <label for="sign">个性签名:</label>
-                    <textarea rows="5" cols="33"></textarea>
-                </div>
-                <button class="register-button" @click="register">注册</button>
-            </form>
-            <div class="login-link">
-                <router-link to="/user/login">已有账号？点击登录</router-link>
-            </div>
+  <div class="registration-container">
+    <div class="registration-form">
+      <form>
+        <h2 class="top">注册</h2>
+        <div class="form-group">
+          <label for="username">用户名:</label>
+          <input type="text" id="username" v-model="username" />
+          <span class="error-message" v-if="isUsernameEmpty">请输入用户名</span>
         </div>
+        <div class="form-group">
+          <label for="password">密码:</label>
+          <input type="password" id="password" v-model="password" />
+          <span class="error-message" v-if="isPasswordEmpty">请输入密码</span>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">确认密码:</label>
+          <input type="password" id="confirmPassword" v-model="confirmPassword" />
+          <span class="error-message" v-if="isConfirmPasswordEmpty">请确认密码</span>
+          <span class="error-message" v-if="isPasswordMismatch">密码不匹配</span>
+        </div>
+        <div class="form-group">
+          <label for="email">邮箱:</label>
+          <input type="email" id="email" v-model="email" />
+          <span class="error-message" v-if="isInvalidEmail">请输入格式正确的邮箱</span>
+        </div>
+        <div class="form-group">
+          <label for="sign">个性签名:</label>
+          <textarea rows="5" cols="33" v-model="signature"></textarea>
+        </div>
+        <button class="register-button" @click="register">注册</button>
+      </form>
+      <div class="login-link">
+        <router-link to="/user/login">已有账号？点击登录</router-link>
+      </div>
     </div>
+  </div>
 </template>
-  
+
 <script>
 export default {
-    data() {
-        return {
-            username: '',
-            password: '',
-            email: '',
-            gender: [],
-            interests: []
-        };
+  data() {
+    return {
+      username: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      signature: '',
+    };
+  },
+  computed: {
+    isUsernameEmpty() {
+      return this.username.trim() === '';
     },
-    methods: {
-        register() {
-            // 注册逻辑
-            console.log('注册');
-        }
-    }
+    isPasswordEmpty() {
+      return this.password === '';
+    },
+    isConfirmPasswordEmpty() {
+      return this.confirmPassword === '';
+    },
+    isPasswordMismatch() {
+      return this.password !== this.confirmPassword;
+    },
+    isInvalidEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return !emailRegex.test(this.email);
+    },
+  },
+  methods: {
+    register() {
+      // 检查表单字段是否有效
+      if (
+        this.isUsernameEmpty ||
+        this.isPasswordEmpty ||
+        this.isConfirmPasswordEmpty ||
+        this.isPasswordMismatch ||
+        this.isInvalidEmail
+      ) {
+        console.log('请填写有效的注册信息');
+        return;
+      }
+
+      // 进行注册逻辑
+      console.log('注册');
+    },
+  },
 };
 </script>
+
   
 <style>
 .registration-container {
@@ -119,6 +151,11 @@ input {
 
 .login-link a:hover {
     text-decoration: underline;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
 }
 </style>
   
