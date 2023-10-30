@@ -4,9 +4,14 @@
       <form>
         <h2 class="top">注册</h2>
         <div class="form-group">
-          <label for="username">用户名:</label>
-          <input type="text" id="username" v-model="username" />
-          <span class="error-message" v-if="isUsernameEmpty">请输入用户名</span>
+          <label for="userName">用户名:</label>
+          <input type="text" id="userName" v-model="userName" />
+          <span class="error-message" v-if="isUserNameEmpty">请输入用户名</span>
+        </div>
+        <div class="form-group">
+          <label for="email">邮箱:</label>
+          <input type="email" id="email" v-model="email" />
+          <span class="error-message" v-if="isemailEmpty">请输入格式正确的邮箱</span>
         </div>
         <div class="form-group">
           <label for="password">密码:</label>
@@ -19,15 +24,8 @@
           <span class="error-message" v-if="isConfirmPasswordEmpty">请确认密码</span>
           <span class="error-message" v-if="isPasswordMismatch">密码不匹配</span>
         </div>
-        <div class="form-group">
-          <label for="email">邮箱:</label>
-          <input type="email" id="email" v-model="email" />
-          <span class="error-message" v-if="isInvalidEmail">请输入格式正确的邮箱</span>
-        </div>
-        <div class="form-group">
-          <label for="sign">个性签名:</label>
-          <textarea rows="5" cols="33" v-model="signature"></textarea>
-        </div>
+
+
         <button class="register-button" @click="register">注册</button>
       </form>
       <div class="login-link">
@@ -38,19 +36,24 @@
 </template>
 
 <script>
+import { useUserStore } from "@/stores/user";
+import { userReg } from "@/http/user";
 export default {
   data() {
     return {
-      username: '',
+      userName: '',
+      email: '',
       password: '',
       confirmPassword: '',
-      email: '',
-      signature: '',
+      errorMessage: "", // 添加错误提示信息
     };
   },
   computed: {
-    isUsernameEmpty() {
-      return this.username.trim() === '';
+    isUserNameEmpty() {
+      return this.userName === '';
+    },
+    isemailEmpty() {
+      return this.email.trim() === "";
     },
     isPasswordEmpty() {
       return this.password === '';
@@ -61,27 +64,48 @@ export default {
     isPasswordMismatch() {
       return this.password !== this.confirmPassword;
     },
-    isInvalidEmail() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return !emailRegex.test(this.email);
-    },
   },
+
+
   methods: {
-    register() {
+    async register() {
       // 检查表单字段是否有效
       if (
-        this.isUsernameEmpty ||
+        this.isUserNameEmpty ||
         this.isPasswordEmpty ||
         this.isConfirmPasswordEmpty ||
         this.isPasswordMismatch ||
         this.isInvalidEmail
       ) {
-        console.log('请填写有效的注册信息');
+        this.errorMessage = "请填写有效的注册信息";
         return;
       }
 
-      // 进行注册逻辑
-      console.log('注册');
+      const userStore = useUserStore();
+
+      try {
+        // 注册信息
+        const response = await userReg({
+          userName: this.userName,
+          email: this.email,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+        }).then(res => {
+          // 注册成功
+          console.log(res);
+          console.log("注册成功")
+          userStore.setUser(res.userinfo);
+        }).catch(err => {
+          //console.log(err.response.data);
+          console.log("注册失败1");
+          console.log(err);
+        });
+        // 跳转到目标页面
+        this.$router.push("/user/login");
+      } catch (error) {
+        console.log("注册失败2");
+        console.log(err);
+      }
     },
   },
 };
@@ -90,67 +114,67 @@ export default {
   
 <style>
 .registration-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .registration-form {
-    width: 300px;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: rgba(141, 138, 138, 0.3);
+  width: 300px;
+  padding: 20px;
+  border-radius: 5px;
+  background-color: rgba(141, 138, 138, 0.3);
 }
 
 .top {
-    font-weight: bold;
-    margin: auto;
-    text-align: center;
+  font-weight: bold;
+  margin: auto;
+  text-align: center;
 }
 
 .form-group {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 label {
-    display: block;
-    margin-bottom: 10px;
+  display: block;
+  margin-bottom: 10px;
 }
 
 input {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 
 .register-button {
-    width: 100%;
-    padding: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 
 .login-link {
-    text-align: center;
-    margin-top: 10px;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .login-link a {
-    color: #007bff;
-    text-decoration: none;
+  color: #007bff;
+  text-decoration: none;
 }
 
 .login-link a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .error-message {

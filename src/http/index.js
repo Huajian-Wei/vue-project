@@ -8,6 +8,15 @@ const login = (data) => {
     })
 }
 
+const register = (data) => {
+    return axios.request({
+        url:'/api/mobile/eregister',
+        method:'post',
+        data
+    })
+}
+
 export {
-    login
+    login,
+    register
 }

@@ -12,15 +12,16 @@
             <h2>个人信息</h2>
             <div class="user-info">
                 <div class="details">
-                    <p>用户名：Huajian Wei</p>
-                    <p>邮箱：Huajian Wei@example.com</p>
-                    <p>个性签名：114514</p>
+                    <p>用户名：weihuajian</p>
+                    <p>邮箱：whj@qq.com</p>
                 </div>
             </div>
         </div>
     </div>
 </template>
-  
+<script setup>
+
+</script>
 <style>
 .user-center {
     display: flex;
