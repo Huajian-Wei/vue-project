@@ -1,6 +1,7 @@
 <template>
   <div class="article-detail-container">
     <h1 class="article-detail-title">文章详情页</h1>
+    <router-link to="/user/index" class="back-link">返回</router-link>
     <div v-if="article" class="article-content">
       <h2>{{ article.title }}</h2>
       <p class="article-info">发布时间: {{ article.createTime }}</p>
@@ -51,5 +52,9 @@ export default {
 .article-body {
   font-size: 16px;
   line-height: 1.6;
+}
+.back-link {
+  text-decoration: none;
+  color: #000;
 }
 </style>

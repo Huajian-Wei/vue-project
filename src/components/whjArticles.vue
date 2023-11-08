@@ -2,16 +2,17 @@
   <div class="article-list-container">
     <h2>文章分类列表</h2>
     <ul v-if="categories.length > 0" class="category-list">
-      <li v-for="category in categories" :key="category.id" @click="showArticle(category.id)" class="category-item">
+      <li v-for="category in categories" :key="category.id" @click="showArticle(category.id, category.catName)"
+        class="category-item">
         {{ category.catName }}
       </li>
     </ul>
-    
+
     <div v-else>
       <p>加载中...</p>
     </div>
-    
-    <whj-Article v-if="selectedCategoryId" class="article-detail"/>
+
+    <whj-Article v-if="selectedCategoryId" class="article-detail" />
   </div>
 </template>
 
@@ -28,8 +29,8 @@ export default {
     };
   },
   methods: {
-    showArticle(categoryId) {
-      this.$router.push({ name: 'article', params: { id: categoryId} });
+    showArticle(categoryId, catName) {
+      this.$router.push({ name: 'article', params: { id: categoryId, name: catName } });
     }
   },
   created() {
