@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
-
-export const useUserStore=defineStore('user',{
-
-    state:()=>({
-        user:{
+export const useUserStore = defineStore('user', {
+    state: () => ({
+        user: {
             "state": 1,
             "id": 0,
             "userName": "",
@@ -15,13 +13,17 @@ export const useUserStore=defineStore('user',{
             "email": ""
         }
     }),
-    actions:{
-        setUser(user){
-            this.user=user
+    actions: {
+        setUser(user) {
+            this.user = user
         },
         //获取用户信息
-        getUserInfo(){
+        getUserInfo() {
             return this.user
-        }
+        },
+        
+    },
+    persist: {
+        enabled: true
     }
 })

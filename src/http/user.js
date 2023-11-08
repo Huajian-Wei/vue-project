@@ -16,7 +16,9 @@ const userReg = (data) => {
   });
 }
 
+
+
 export {
   userLogin,
-  userReg,
+  userReg
 };
